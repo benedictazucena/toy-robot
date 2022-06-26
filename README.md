@@ -10,10 +10,10 @@ Toy Robot - Iress Code Challenge
 
   - Install Python3 - [Installation Guide](http:/https://docs.python-guide.org/starting/installation// "Installation Guide")
   - Install Git - [Installation Guide](https://github.com/git-guides/install-git "Installation Guide")
-  - git clone git@github.com:benedictazucena/toy-robot.git
+  - On your git folder, run: `git clone git@github.com:benedictazucena/toy-robot.git`
 
 ## Quick Start
-1. Navigate first to to the toy-robot project folder.
+1. Navigate to the toy-robot project folder.
 
 1. Run this command to start the application in manual command input:
 `$ python robot_app.py 5 5`
@@ -21,7 +21,6 @@ Toy Robot - Iress Code Challenge
 
 1. You may also use fileinput by specifying the flag -f and filename.
 `$ python robot_app.py 5 5 -f commands.txt`
-</table>
 
 1. You may now use the `PLACE X,Y,F | LEFT | RIGHT | MOVE | REPORT` commands as specified in the challenge document.
 
