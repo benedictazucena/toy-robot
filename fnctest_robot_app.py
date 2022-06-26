@@ -1,60 +1,120 @@
-#!/usr/bin/env python3.6
-
-import io
 import unittest
 
-from robot_app import Commander
 from robot import Robot
 from position import Position
 
 DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST']
-TABLE_END_POS = Position(4,4)
+# this sets a default 5x5 table
+TABLE_END_POS = Position(4, 4)
+VALID_ROBOT = Robot(TABLE_END_POS)
 
-class TestTurns(unittest.TestCase):
+
+class TestRobotTurns(unittest.TestCase):
+    def testRotate(self):
+        VALID_ROBOT.place(Position(0, 0), 'NORTH')
+        self.assertEqual(VALID_ROBOT.direction, 'NORTH')
+        VALID_ROBOT._rotate(1)
+        self.assertEqual(VALID_ROBOT.direction, 'EAST')
+        VALID_ROBOT._rotate(-1)
+        self.assertEqual(VALID_ROBOT.direction, 'NORTH')
 
     def testLeftTurns(self):
-        # Check that robot does a 360 counter-clockwise turn.
-        robot = Robot(TABLE_END_POS)
-        robot.place(Position(0, 0), 'NORTH')
-        self.assertEqual(robot.direction, 'NORTH')
+        # Tests all directions using left turn
+        VALID_ROBOT.place(Position(0, 0), 'NORTH')
+        self.assertEqual(VALID_ROBOT.direction, 'NORTH')
         for direction in [
             "WEST",
             "SOUTH",
             "EAST",
             "NORTH"
         ]:
-            robot.turn_left()
-            self.assertEqual(robot.direction, direction)
+            VALID_ROBOT.turn_left()
+            self.assertEqual(VALID_ROBOT.direction, direction)
 
     def testRightTurns(self):
-        robot = Robot(TABLE_END_POS)
-        robot.place(Position(0, 0), "NORTH")
+        VALID_ROBOT.place(Position(0, 0), "NORTH")
         # Check that robot does a 360 clockwise turn.
-        self.assertEqual(robot.direction, "NORTH")
+        self.assertEqual(VALID_ROBOT.direction, "NORTH")
         for direction in [
             "EAST",
             "SOUTH",
             "WEST",
             "NORTH"
         ]:
-            robot.turn_right()
-            self.assertEqual(robot.direction, direction)
+            VALID_ROBOT.turn_right()
+            self.assertEqual(VALID_ROBOT.direction, direction)
+
+
+class TestMovement(unittest.TestCase):
+    def testValidMoveNorth(self):
+        VALID_ROBOT.place(Position(2, 2), "NORTH")
+        self.assertEqual(VALID_ROBOT.direction, "NORTH")
+        VALID_ROBOT.move()
+        self.assertEqual(VALID_ROBOT.direction, "NORTH")
+        self.assertEqual(str(VALID_ROBOT.position), "(2,3)")
+
+    def testValidMoveEast(self):
+        VALID_ROBOT.place(Position(2, 2), "EAST")
+        self.assertEqual(VALID_ROBOT.direction, "EAST")
+        VALID_ROBOT.move()
+        self.assertEqual(VALID_ROBOT.direction, "EAST")
+        self.assertEqual(str(VALID_ROBOT.position), "(3,2)")
+
+    def testValidMoveSouth(self):
+        VALID_ROBOT.place(Position(2, 2), "SOUTH")
+        self.assertEqual(VALID_ROBOT.direction, "SOUTH")
+        VALID_ROBOT.move()
+        self.assertEqual(VALID_ROBOT.direction, "SOUTH")
+        self.assertEqual(str(VALID_ROBOT.position), "(2,1)")
+
+    def testValidMoveWest(self):
+        VALID_ROBOT.place(Position(2, 2), "WEST")
+        self.assertEqual(VALID_ROBOT.direction, "WEST")
+        VALID_ROBOT.move()
+        self.assertEqual(VALID_ROBOT.direction, "WEST")
+        self.assertEqual(str(VALID_ROBOT.position), "(1,2)")
+
+    def testInvalidMoveNorth(self):
+        VALID_ROBOT.place(Position(2, 4), "NORTH")
+        self.assertEqual(VALID_ROBOT.direction, "NORTH")
+        VALID_ROBOT.move()
+        self.assertEqual(VALID_ROBOT.direction, "NORTH")
+        self.assertEqual(str(VALID_ROBOT.position), "(2,4)")
+
+    def testInvalidMoveEast(self):
+        VALID_ROBOT.place(Position(4, 2), "EAST")
+        self.assertEqual(VALID_ROBOT.direction, "EAST")
+        VALID_ROBOT.move()
+        self.assertEqual(VALID_ROBOT.direction, "EAST")
+        self.assertEqual(str(VALID_ROBOT.position), "(4,2)")
+
+    def testInvalidMoveSouth(self):
+        VALID_ROBOT.place(Position(2, 0), "SOUTH")
+        self.assertEqual(VALID_ROBOT.direction, "SOUTH")
+        VALID_ROBOT.move()
+        self.assertEqual(VALID_ROBOT.direction, "SOUTH")
+        self.assertEqual(str(VALID_ROBOT.position), "(2,0)")
+
+    def testInvalidMoveWest(self):
+        VALID_ROBOT.place(Position(0, 2), "WEST")
+        self.assertEqual(VALID_ROBOT.direction, "WEST")
+        VALID_ROBOT.move()
+        self.assertEqual(VALID_ROBOT.direction, "WEST")
+        self.assertEqual(str(VALID_ROBOT.position), "(0,2)")
 
 
 class TestPlacement(unittest.TestCase):
 
     def testInvalidPlacements(self):
+        invalid_places = [(-2, -2), (-2, -1), (-1, -2), (-1, 5), (5, -1), (5, 5)]
+        # Initialized robot is off-table
         robot = Robot(TABLE_END_POS)
-        invalid_places = [(-1, -1), (-1, 0), (0, -1), (0, 5), (5, 0), (5, 5)]
-        # Check that robot ignores invalid placements.
         self.assertFalse(robot.position.is_on_table(TABLE_END_POS))
         for invalid in invalid_places:
             robot.place(Position(*invalid), "NORTH")
             self.assertFalse(robot.position.is_on_table(TABLE_END_POS))
         robot.place(Position(0, 0), "NORTH")
-        # Thunderbirds Are Go!
         self.assertTrue(robot.position.is_on_table(TABLE_END_POS))
-        # Check that robot ignores invalid placements after it's on the table.
         for invalid in invalid_places:
             robot.place(Position(*invalid), "NORTH")
             self.assertTrue(robot.position.is_on_table(TABLE_END_POS))
