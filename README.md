@@ -17,7 +17,7 @@ Toy Robot - Iress Code Challenge
 
 1. Run this command to start the application in manual command input:
 `$ python robot_app.py 5 5`
-*Note: The arguments 5 5 are the dimensions (x,y) of the table to be used*
+*note: the arguments 5 5 are the dimensions (x,y) of the table to be used*
 
 1. You may also use fileinput by specifying the flag -f and filename.
 `$ python robot_app.py 5 5 -f commands.txt`
@@ -38,7 +38,8 @@ Manual input usage:
     output: 1,1,EAST
 
 Command file usage:
-    > python3 robot_app.py 5 5 -f commands.txt 
+
+    python3 robot_app.py 5 5 -f commands.txt 
     output: 1,4,EAST
     output: 3,2,SOUTH
     output: 3,0,EAST
