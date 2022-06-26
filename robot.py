@@ -18,6 +18,8 @@ OFFSET_POS = {
 class Robot:
 
     def __init__(self, table_end_pos):
+        if table_end_pos.x < 0 or table_end_pos.y < 0:
+            raise ValueError("Invalid table size!")
         self.table_end_pos = table_end_pos
         self.position = INIT_ROBOT_POS
         self.direction = "NORTH"

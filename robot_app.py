@@ -8,6 +8,7 @@ from position import Position
 PLACE_SYNTAX = re.compile(r'PLACE \d+,\d+,(NORTH|SOUTH|EAST|WEST)')
 
 
+
 class Commander:
 
     def __init__(self, robot):
@@ -41,9 +42,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     table_x = args.table_x
     table_y = args.table_y
-
-    if table_x <= 0 or table_y <= 0:
-        raise ValueError("Invalid table size!")
 
     table_end_pos = Position(table_x - 1, table_y - 1)
     robot = Robot(table_end_pos)
