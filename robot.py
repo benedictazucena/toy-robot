@@ -1,4 +1,3 @@
-from enum import Enum, auto
 from position import Position
 
 # Initial robot position that is not yet placed on the table
