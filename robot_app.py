@@ -6,7 +6,7 @@ from position import Position
 
 # Regex for validating PLACE syntax
 PLACE_SYNTAX = re.compile(r'PLACE \d+,\d+,(NORTH|SOUTH|EAST|WEST)')
-
+DEFAULT_TABLE_END_POS = Position(4, 4)
 
 
 class Commander:
@@ -31,7 +31,8 @@ class Commander:
         elif command == 'REPORT':
             self.robot.report()
         else:
-            pass  # Ignore any invalid command lines.
+            # Ignore any invalid commands
+            pass
 
 
 if __name__ == '__main__':
@@ -43,9 +44,16 @@ if __name__ == '__main__':
     table_x = args.table_x
     table_y = args.table_y
 
+    # Table end position is the max allowable position given the dimensions
     table_end_pos = Position(table_x - 1, table_y - 1)
-    robot = Robot(table_end_pos)
-    robot_commander = Commander(robot)
+    try:
+        robot = Robot(table_end_pos)
+        robot_commander = Commander(robot)
+    except ValueError as e:
+        print(e)
+        print("Switching to default 5x5 table size")
+        robot = Robot(DEFAULT_TABLE_END_POS)
+        robot_commander = Commander(robot)
 
     if args.file:
         try:

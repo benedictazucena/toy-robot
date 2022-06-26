@@ -5,7 +5,7 @@ from position import Position
 # Used (-1,-1) to invalidate commands before PLACE
 INIT_ROBOT_POS = Position(-1, -1)
 
-DIRECTIONS = ['NORTH','EAST','SOUTH','WEST']
+DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST']
 
 OFFSET_POS = {
     "NORTH": Position(0, 1),
@@ -37,8 +37,7 @@ class Robot:
 
     def _rotate(self, turn_val=1):
         current_direction_index = DIRECTIONS.index(self.direction)
-        # if count is positive that implies resultant is clockwise direction
-        # if count is negative that implies resultant is counter-clockwise direction
+        # if count is positive then rotation is clockwise, if negative then counter
         new_direction_index = (current_direction_index + turn_val) % len(DIRECTIONS)
         self.direction = DIRECTIONS[new_direction_index]
 

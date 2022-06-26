@@ -4,6 +4,9 @@ class Position:
         self.x = x
         self.y = y
 
+    def __str__(self):
+        return f'({self.x},{self.y})'
+
     def __add__(self, position):
         return Position(self.x + position.x, self.y + position.y)
 
